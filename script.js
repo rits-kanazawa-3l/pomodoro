@@ -54,8 +54,13 @@ function updateDisplay() {
   const seconds = timeLeft % 60;
   const timerElem = document.getElementById("timer");
   timerElem.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  document.getElementById("mode").textContent = isWorkTime ? "作業中" : "休憩中";
-  document.getElementById("mode").className = isWorkTime ? "work" : "break";
+  const modeElem = document.getElementById("mode");
+  if (!isRunning) {
+    modeElem.textContent = isWorkTime ? "作業開始前" : "休憩開始前";
+  } else {
+    modeElem.textContent = isWorkTime ? "作業中" : "休憩中";
+  }
+  modeElem.className = isWorkTime ? "work" : "break";
 
   // 残り1分未満で焦り演出
   if (timeLeft > 0 && timeLeft < 60) {
@@ -103,10 +108,9 @@ function internalResetTimer() {
 }
 
 function startTimer() {
-  if (isWorkTime) internalResetTimer(); // スタート時にリセット
   if (isRunning) return;
   isRunning = true;
-
+  updateDisplay();
   logAction(isWorkTime ? "作業スタート" : "休憩スタート");
 
   timerInterval = setInterval(() => {
@@ -115,7 +119,6 @@ function startTimer() {
     if (timeLeft < 0) {
       clearInterval(timerInterval);
       isRunning = false;
-
 
       // 通知表示
       if ("Notification" in window && Notification.permission === "granted") {
