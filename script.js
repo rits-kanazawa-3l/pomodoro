@@ -1,3 +1,17 @@
+// テーマ切り替え
+function changeTheme() {
+  const theme = document.getElementById('themeSelect').value;
+  document.body.className = '';
+  document.body.classList.add('theme-' + theme);
+  // ラベル色はCSSで制御
+}
+
+// 初期テーマ適用
+window.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('themeSelect');
+  if (select) select.value = 'modern';
+  changeTheme();
+});
 // ログをテキストファイルで保存
 function saveLog() {
   const log = document.getElementById("logArea").value;
@@ -38,10 +52,17 @@ let lastEventTime = null; // 前回イベント時刻
 function updateDisplay() {
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
-  document.getElementById("timer").textContent =
-    `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  const timerElem = document.getElementById("timer");
+  timerElem.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   document.getElementById("mode").textContent = isWorkTime ? "作業中" : "休憩中";
   document.getElementById("mode").className = isWorkTime ? "work" : "break";
+
+  // 残り1分未満で焦り演出
+  if (timeLeft > 0 && timeLeft < 60) {
+    timerElem.classList.add("hurry-up");
+  } else {
+    timerElem.classList.remove("hurry-up");
+  }
 }
 
 function logAction(action) {
