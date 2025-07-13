@@ -9,6 +9,7 @@ let isRunning = false;
 let isWorkTime = true;
 let timeLeft = 25 * 60;
 let timerInterval;
+let lastEventTime = null; // 前回イベント時刻
 
 function updateDisplay() {
   const minutes = Math.floor(timeLeft / 60);
@@ -21,9 +22,30 @@ function updateDisplay() {
 
 function logAction(action) {
   const now = new Date();
-  const timestamp = now.toLocaleString();
+  // 秒なしのタイムスタンプ（YYYY/MM/DD HH:MM）
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  const timestamp = `${y}/${m}/${d} ${hh}:${mm}`;
   const logArea = document.getElementById("logArea");
-  logArea.value += `${timestamp} - ${action}\n`;
+  let diffText = "";
+  if (lastEventTime) {
+    const diffMs = now - lastEventTime;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin > 0) {
+      if (diffMin < 60) {
+        diffText = `（前回から${diffMin}分経過）`;
+      } else {
+        const diffHr = Math.floor(diffMin / 60);
+        const remainMin = diffMin % 60;
+        diffText = `（前回から${diffHr}時間${remainMin}分経過）`;
+      }
+    }
+  }
+  logArea.value += `${timestamp} - ${action}${diffText}\n`;
+  lastEventTime = now;
 }
 
 function internalResetTimer() {
