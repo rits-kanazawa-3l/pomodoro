@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ポモドーロタイマー</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>ポモドーロタイマー</h1>
+
+  <div>
+    作業時間（分）: <input type="number" id="workDuration" value="25" min="1">
+    休憩時間（分）: <input type="number" id="breakDuration" value="5" min="1">
+  </div>
+
+  <div id="mode" class="work">作業中</div>
+  <div id="timer">25:00</div>
+  <button onclick="startTimer()">スタート</button>
+  <button onclick="resetTimer()">リセット</button>
+
+  <h3>ログ</h3>
+  <textarea id="logArea" rows="10" cols="50"></textarea>
+
+  <script src="script.js"></script>
+</body>
+</html>
