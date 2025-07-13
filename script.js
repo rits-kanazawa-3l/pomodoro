@@ -30,13 +30,13 @@ function internalResetTimer() {
   clearInterval(timerInterval);
   isRunning = false;
   isWorkTime = true;
-  const workDuration = parseInt(document.getElementById("workDuration").value) || 25;
-  timeLeft = workDuration * 60;
+  const workDuration = parseFloat(document.getElementById("workDuration").value) || 25;
+  timeLeft = Math.round(workDuration * 60);
   updateDisplay();
 }
 
 function startTimer() {
-  internalResetTimer(); // スタート時にリセット
+  if (isWorkTime) internalResetTimer(); // スタート時にリセット
   if (isRunning) return;
   isRunning = true;
 
@@ -62,9 +62,9 @@ function startTimer() {
       isWorkTime = !isWorkTime;
 
       // 次の時間を設定
-      const workDuration = parseInt(document.getElementById("workDuration").value) || 25;
-      const breakDuration = parseInt(document.getElementById("breakDuration").value) || 5;
-      timeLeft = isWorkTime ? workDuration * 60 : breakDuration * 60;
+      const workDuration = parseFloat(document.getElementById("workDuration").value) || 25;
+      const breakDuration = parseFloat(document.getElementById("breakDuration").value) || 5;
+      timeLeft = Math.round(isWorkTime ? workDuration * 60 : breakDuration * 60);
 
       updateDisplay();
 
