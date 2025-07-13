@@ -1,3 +1,27 @@
+// ログをテキストファイルで保存
+function saveLog() {
+  const log = document.getElementById("logArea").value;
+  const blob = new Blob([log], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `pomodoro_log_${getNowForFilename()}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ファイル名用の日時文字列（YYYYMMDD_HHMM）
+function getNowForFilename() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  return `${y}${m}${d}_${hh}${mm}`;
+}
 // ページ読み込み時に通知許可をリクエスト
 window.addEventListener('DOMContentLoaded', () => {
   if ("Notification" in window) {
