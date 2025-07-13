@@ -73,6 +73,13 @@ function startTimer() {
   }, 1000);
 }
 
+function changeTimer() {
+  //internalResetTimer();
+  const workDuration = parseFloat(document.getElementById("workDuration").value) || 25;
+  const breakDuration = parseFloat(document.getElementById("breakDuration").value) || 5;
+  timeLeft = Math.round(isWorkTime ? workDuration * 60 : breakDuration * 60);
+}
+
 function resetTimer() {
   internalResetTimer();
   logAction("リセット");
